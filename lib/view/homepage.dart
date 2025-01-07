@@ -195,11 +195,11 @@ class _HomepageState extends State<Homepage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(IconsaxPlusBold.element_2),
-            label: 'Search',
+            label: 'Explore',
           ),
           BottomNavigationBarItem(
             icon: Icon(IconsaxPlusBold.heart),
-            label: 'Explore',
+            label: 'favourites',
           ),
           BottomNavigationBarItem(
             icon: Icon(IconsaxPlusBold.profile),
