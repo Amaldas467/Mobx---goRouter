@@ -9,7 +9,6 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  // List to track selected categories
   List<int> selectedCategoryIndices = [];
 
   @override
@@ -17,7 +16,6 @@ class _CategoryPageState extends State<CategoryPage> {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Check if any category is selected
     bool isAnyCategorySelected = selectedCategoryIndices.isNotEmpty;
 
     return Scaffold(
