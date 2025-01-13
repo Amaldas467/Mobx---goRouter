@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:skincare_app/controller/cart_controller.dart'; // Make sure to import CartController
+import 'package:skincare_app/controller/cart_controller.dart';
 
 class CartPage extends StatelessWidget {
-  // Make sure cartController is a named parameter
   final CartController cartController;
 
   const CartPage({Key? key, required this.cartController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Use cartController in your widget logic
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Cart"),
@@ -126,7 +124,7 @@ class CartPage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              cartController.cartProducts.clear();
+              cartController.clearCart();
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(

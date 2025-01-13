@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:skincare_app/controller/cart_controller.dart';
-import 'package:skincare_app/controller/homescreen_controller.dart';
+
 import 'package:skincare_app/model/productResModel.dart';
 import 'package:skincare_app/utilities/color_constants.dart';
 

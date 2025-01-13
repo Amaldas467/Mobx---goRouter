@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skincare_app/utilities/color_constants.dart';
-import 'package:skincare_app/view/category.dart';
 
 class Splash extends StatelessWidget {
   @override
