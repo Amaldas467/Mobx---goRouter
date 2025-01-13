@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:skincare_app/controller/cart_controller.dart'; // Add import for CartController
-// Add import for FavoritesController
+import 'package:provider/provider.dart';
+import 'package:skincare_app/controller/cart_controller.dart';
+
 import 'package:skincare_app/model/productResModel.dart';
 import 'package:skincare_app/view/cartpage.dart';
 import 'package:skincare_app/view/category.dart';
@@ -45,14 +45,8 @@ final GoRouter router = GoRouter(
       path: '/Cartpage',
       name: '/Cartpage',
       builder: (context, state) {
-        final cartController = state.extra as CartController?;
-        if (cartController == null) {
-          return Scaffold(
-            body: Center(child: Text('Error: Controller is missing.')),
-          );
-        }
-        return CartPage(
-            cartController: cartController); // Updated to use CartController
+        final cartController = Provider.of<CartController>(context);
+        return CartPage(cartController: cartController);
       },
     ),
   ],
