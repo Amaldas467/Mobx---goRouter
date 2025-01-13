@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:skincare_app/controller/homescreen_controller.dart';
+import 'package:skincare_app/controller/cart_controller.dart'; // Make sure to import CartController
 
 class CartPage extends StatelessWidget {
-  final Homescreencontroller homescreenController;
+  // Make sure cartController is a named parameter
+  final CartController cartController;
 
-  const CartPage({Key? key, required this.homescreenController})
-      : super(key: key);
+  const CartPage({Key? key, required this.cartController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Use cartController in your widget logic
     return Scaffold(
       appBar: AppBar(
         title: const Text("Your Cart"),
@@ -17,7 +18,7 @@ class CartPage extends StatelessWidget {
       ),
       body: Observer(
         builder: (_) {
-          if (homescreenController.cartProducts.isEmpty) {
+          if (cartController.cartProducts.isEmpty) {
             return const Center(
               child: Text(
                 'Your cart is empty',
@@ -26,9 +27,9 @@ class CartPage extends StatelessWidget {
             );
           }
           return ListView.builder(
-            itemCount: homescreenController.cartProducts.length,
+            itemCount: cartController.cartProducts.length,
             itemBuilder: (context, index) {
-              final product = homescreenController.cartProducts[index];
+              final product = cartController.cartProducts[index];
               return ListTile(
                 leading: Image.network(
                   product.image ?? "https://via.placeholder.com/150",
@@ -48,7 +49,7 @@ class CartPage extends StatelessWidget {
                 trailing: IconButton(
                   icon: const Icon(Icons.remove_circle, color: Colors.red),
                   onPressed: () {
-                    homescreenController.removeFromCart(product);
+                    cartController.removeFromCart(product);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text("${product.title} removed from cart"),
@@ -62,14 +63,15 @@ class CartPage extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: _buildTotalPriceSection(context),
+      bottomNavigationBar: _buildTotalPriceSection(context, cartController),
     );
   }
 
-  Widget _buildTotalPriceSection(BuildContext context) {
+  Widget _buildTotalPriceSection(
+      BuildContext context, CartController cartController) {
     return Observer(
       builder: (_) {
-        final totalPrice = homescreenController.calculateTotalPrice();
+        final totalPrice = cartController.calculateTotalPrice();
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           decoration: BoxDecoration(
@@ -92,7 +94,7 @@ class CartPage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  _showCheckoutDialog(context);
+                  _showCheckoutDialog(context, cartController);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -108,7 +110,8 @@ class CartPage extends StatelessWidget {
     );
   }
 
-  void _showCheckoutDialog(BuildContext context) {
+  void _showCheckoutDialog(
+      BuildContext context, CartController cartController) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -123,7 +126,7 @@ class CartPage extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              homescreenController.cartProducts.clear();
+              cartController.cartProducts.clear();
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(

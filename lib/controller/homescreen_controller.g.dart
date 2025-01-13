@@ -25,22 +25,6 @@ mixin _$Homescreencontroller on _Homescreencontroller, Store {
     });
   }
 
-  late final _$favouriteProductsAtom =
-      Atom(name: '_Homescreencontroller.favouriteProducts', context: context);
-
-  @override
-  List<ProductREsModel> get favouriteProducts {
-    _$favouriteProductsAtom.reportRead();
-    return super.favouriteProducts;
-  }
-
-  @override
-  set favouriteProducts(List<ProductREsModel> value) {
-    _$favouriteProductsAtom.reportWrite(value, super.favouriteProducts, () {
-      super.favouriteProducts = value;
-    });
-  }
-
   late final _$isLoadingAtom =
       Atom(name: '_Homescreencontroller.isLoading', context: context);
 
@@ -73,38 +57,6 @@ mixin _$Homescreencontroller on _Homescreencontroller, Store {
     });
   }
 
-  late final _$cartItemsAtom =
-      Atom(name: '_Homescreencontroller.cartItems', context: context);
-
-  @override
-  List<CartItem> get cartItems {
-    _$cartItemsAtom.reportRead();
-    return super.cartItems;
-  }
-
-  @override
-  set cartItems(List<CartItem> value) {
-    _$cartItemsAtom.reportWrite(value, super.cartItems, () {
-      super.cartItems = value;
-    });
-  }
-
-  late final _$cartProductsAtom =
-      Atom(name: '_Homescreencontroller.cartProducts', context: context);
-
-  @override
-  List<ProductREsModel> get cartProducts {
-    _$cartProductsAtom.reportRead();
-    return super.cartProducts;
-  }
-
-  @override
-  set cartProducts(List<ProductREsModel> value) {
-    _$cartProductsAtom.reportWrite(value, super.cartProducts, () {
-      super.cartProducts = value;
-    });
-  }
-
   late final _$getDataAsyncAction =
       AsyncAction('_Homescreencontroller.getData', context: context);
 
@@ -113,62 +65,12 @@ mixin _$Homescreencontroller on _Homescreencontroller, Store {
     return _$getDataAsyncAction.run(() => super.getData());
   }
 
-  late final _$_HomescreencontrollerActionController =
-      ActionController(name: '_Homescreencontroller', context: context);
-
-  @override
-  void toggleFavourite(ProductREsModel product) {
-    final _$actionInfo = _$_HomescreencontrollerActionController.startAction(
-        name: '_Homescreencontroller.toggleFavourite');
-    try {
-      return super.toggleFavourite(product);
-    } finally {
-      _$_HomescreencontrollerActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void addToCart(ProductREsModel product) {
-    final _$actionInfo = _$_HomescreencontrollerActionController.startAction(
-        name: '_Homescreencontroller.addToCart');
-    try {
-      return super.addToCart(product);
-    } finally {
-      _$_HomescreencontrollerActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void removeFromCart(ProductREsModel product) {
-    final _$actionInfo = _$_HomescreencontrollerActionController.startAction(
-        name: '_Homescreencontroller.removeFromCart');
-    try {
-      return super.removeFromCart(product);
-    } finally {
-      _$_HomescreencontrollerActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  double calculateTotalPrice() {
-    final _$actionInfo = _$_HomescreencontrollerActionController.startAction(
-        name: '_Homescreencontroller.calculateTotalPrice');
-    try {
-      return super.calculateTotalPrice();
-    } finally {
-      _$_HomescreencontrollerActionController.endAction(_$actionInfo);
-    }
-  }
-
   @override
   String toString() {
     return '''
 productlist: ${productlist},
-favouriteProducts: ${favouriteProducts},
 isLoading: ${isLoading},
-baseurl: ${baseurl},
-cartItems: ${cartItems},
-cartProducts: ${cartProducts}
+baseurl: ${baseurl}
     ''';
   }
 }

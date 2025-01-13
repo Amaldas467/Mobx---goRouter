@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
-import 'package:skincare_app/controller/homescreen_controller.dart';
+import 'package:skincare_app/controller/favourite_controller.dart';
+
 import 'package:skincare_app/view/widgets/product_card2.dart';
 
 class FavouritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final homescreencontroller = context.read<Homescreencontroller>();
+    final favoritesController = Provider.of<FavouriteController>(context);
 
     return Column(
       children: [
@@ -20,7 +21,7 @@ class FavouritesScreen extends StatelessWidget {
         ),
         Observer(
           builder: (context) {
-            final favouriteProducts = homescreencontroller.favouriteProducts;
+            final favouriteProducts = favoritesController.favouriteProducts;
 
             if (favouriteProducts.isEmpty) {
               return Center(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:skincare_app/controller/homescreen_controller.dart';
+import 'package:skincare_app/controller/cart_controller.dart'; // Add import for CartController
+// Add import for FavoritesController
 import 'package:skincare_app/model/productResModel.dart';
 import 'package:skincare_app/view/cartpage.dart';
 import 'package:skincare_app/view/category.dart';
 import 'package:skincare_app/view/homepage.dart';
 import 'package:skincare_app/view/splash.dart';
-
 import 'package:skincare_app/view/widgets/productdetail.dart';
 
 final GoRouter router = GoRouter(
@@ -45,13 +45,14 @@ final GoRouter router = GoRouter(
       path: '/Cartpage',
       name: '/Cartpage',
       builder: (context, state) {
-        final controller = state.extra as Homescreencontroller?;
-        if (controller == null) {
+        final cartController = state.extra as CartController?;
+        if (cartController == null) {
           return Scaffold(
             body: Center(child: Text('Error: Controller is missing.')),
           );
         }
-        return CartPage(homescreenController: controller);
+        return CartPage(
+            cartController: cartController); // Updated to use CartController
       },
     ),
   ],

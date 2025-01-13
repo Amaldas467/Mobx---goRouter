@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skincare_app/controller/cart_controller.dart';
+import 'package:skincare_app/controller/favourite_controller.dart';
 
 import 'package:skincare_app/controller/homescreen_controller.dart';
 
@@ -20,7 +22,13 @@ class MyApp extends StatelessWidget {
         //  create: (context) => Homescreencontroller(),
         //),
         Provider<Homescreencontroller>(
-            create: (context) => Homescreencontroller())
+            create: (context) => Homescreencontroller()),
+        Provider<FavouriteController>(
+          create: (context) => FavouriteController(),
+        ),
+        Provider<CartController>(
+          create: (context) => CartController(),
+        )
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

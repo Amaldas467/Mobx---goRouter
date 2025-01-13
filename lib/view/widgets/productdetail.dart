@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import 'package:skincare_app/controller/cart_controller.dart';
 import 'package:skincare_app/controller/homescreen_controller.dart';
 import 'package:skincare_app/model/productResModel.dart';
 import 'package:skincare_app/utilities/color_constants.dart';
@@ -13,7 +14,7 @@ class ProductDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homescreenController = Provider.of<Homescreencontroller>(context);
+    final cartcontroller = Provider.of<CartController>(context);
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -125,9 +126,8 @@ class ProductDetailsPage extends StatelessWidget {
                     return ElevatedButton(
                       onPressed: () {
                         print("Product added to cart");
-                        if (homescreenController.cartProducts
-                            .contains(product)) {
-                          homescreenController.removeFromCart(product);
+                        if (cartcontroller.cartProducts.contains(product)) {
+                          cartcontroller.removeFromCart(product);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content:
@@ -136,7 +136,7 @@ class ProductDetailsPage extends StatelessWidget {
                             ),
                           );
                         } else {
-                          homescreenController.addToCart(product);
+                          cartcontroller.addToCart(product);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text("${product.title} added to cart"),

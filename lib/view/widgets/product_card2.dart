@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:skincare_app/controller/homescreen_controller.dart';
+import 'package:skincare_app/controller/cart_controller.dart';
+import 'package:skincare_app/controller/favourite_controller.dart';
+
 import 'package:skincare_app/model/productResModel.dart';
 import 'package:skincare_app/utilities/color_constants.dart';
 
@@ -19,7 +21,8 @@ class ProductCard2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homescreenController = Provider.of<Homescreencontroller>(context);
+    final favoritesController = Provider.of<FavouriteController>(context);
+    final cartController = Provider.of<CartController>(context);
 
     return InkWell(
       onTap: () {
@@ -60,7 +63,7 @@ class ProductCard2 extends StatelessWidget {
                   child: Observer(
                     builder: (context) {
                       bool isFavorite =
-                          homescreenController.isProductFavourite(product);
+                          favoritesController.isProductFavourite(product);
                       return CircleAvatar(
                         radius: screenWidth * 0.042,
                         backgroundColor: Colors.white,
@@ -72,7 +75,7 @@ class ProductCard2 extends StatelessWidget {
                           ),
                           onPressed: () {
                             if (isFavorite) {
-                              homescreenController.toggleFavourite(product);
+                              favoritesController.toggleFavourite(product);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -81,7 +84,7 @@ class ProductCard2 extends StatelessWidget {
                                 ),
                               );
                             } else {
-                              homescreenController.toggleFavourite(product);
+                              favoritesController.toggleFavourite(product);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -135,9 +138,8 @@ class ProductCard2 extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          if (homescreenController.cartProducts
-                              .contains(product)) {
-                            homescreenController.removeFromCart(product);
+                          if (cartController.cartProducts.contains(product)) {
+                            cartController.removeFromCart(product);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content:
@@ -146,7 +148,7 @@ class ProductCard2 extends StatelessWidget {
                               ),
                             );
                           } else {
-                            homescreenController.addToCart(product);
+                            cartController.addToCart(product);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text("${product.title} added to cart"),
@@ -159,7 +161,7 @@ class ProductCard2 extends StatelessWidget {
                           radius: screenWidth * 0.04,
                           backgroundColor: ColorConstants.buttonColor,
                           child: Icon(
-                            homescreenController.cartProducts.contains(product)
+                            cartController.cartProducts.contains(product)
                                 ? Icons.shopping_cart
                                 : Icons.shopping_cart_outlined,
                             color: Colors.white,
