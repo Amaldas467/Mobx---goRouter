@@ -49,5 +49,12 @@ final GoRouter router = GoRouter(
         return CartPage(cartController: cartController);
       },
     ),
+    GoRoute(
+      path: '/profilepage',
+      name: '/profilepage',
+      builder: (context, state) {
+        return Homepage();
+      },
+    ),
   ],
 );

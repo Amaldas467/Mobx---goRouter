@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:skincare_app/utilities/color_constants.dart';
 
 class Homescreen_drawer extends StatelessWidget {
@@ -19,7 +21,7 @@ class Homescreen_drawer extends StatelessWidget {
                 CircleAvatar(
                   radius: 30,
                   backgroundImage: NetworkImage(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5zKoI_m0hy7V1711x_xYAGJesoMf7jwyhQ&s'), // Replace with your profile image asset
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRy5zKoI_m0hy7V1711x_xYAGJesoMf7jwyhQ&s'),
                 ),
                 SizedBox(width: 10),
                 Expanded(
@@ -47,32 +49,34 @@ class Homescreen_drawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.account_circle),
+            leading: Icon(IconsaxPlusBold.profile),
             title: Text('Profile'),
-            onTap: () {},
+            onTap: () {
+              //context.pushNamed('/profilepage');
+            },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
+            leading: Icon(IconsaxPlusBold.setting_2),
             title: Text('Settings'),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.chat_outlined),
+            leading: Icon(IconsaxPlusBold.message_2),
             title: Text('Need Help'),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.people),
+            leading: Icon(IconsaxPlusBold.people),
             title: Text('Invite & Earn'),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.wallet_outlined),
+            leading: Icon(IconsaxPlusBold.wallet),
             title: Text('Link Wallet'),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.lock),
+            leading: Icon(IconsaxPlusBold.lock_circle),
             title: Text('View Privacy Policy'),
             onTap: () {},
           ),
@@ -84,13 +88,13 @@ class Homescreen_drawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.apartment),
+            leading: Icon(IconsaxPlusBold.additem),
             title: Text('List Your Products'),
             //subtitle: Text(),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(Icons.logout),
+            leading: Icon(IconsaxPlusBold.logout),
             title: Text('Logout'),
             onTap: () {},
           ),
