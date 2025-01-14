@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -8,24 +9,47 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String selectedGender = 'Undisclosed';
   String selectedMaritalStatus = 'Undisclosed';
+  TextEditingController dobController = TextEditingController();
+  String? ageError;
+  final FocusNode dobFocusNode = FocusNode();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (selectedDate != null) {
+      int age = calculateAge(selectedDate);
+
+      if (age < 18) {
+        setState(() {
+          ageError = 'You must be at least 18 years old.';
+        });
+      } else {
+        setState(() {
+          ageError = null;
+          dobController.text = DateFormat('dd/MM/yyyy').format(selectedDate);
+        });
+      }
+    }
+  }
+
+  int calculateAge(DateTime dob) {
+    final today = DateTime.now();
+    int age = today.year - dob.year;
+    if (today.month < dob.month ||
+        (today.month == dob.month && today.day < dob.day)) {
+      age--;
+    }
+    return age;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: AppBar(
-      //  title: Text('Profile'),
-      //  actions: [
-      //    TextButton(
-      //      onPressed: () {
-      //        // Save action
-      //      },
-      //      child: Text(
-      //        'Save',
-      //        style: TextStyle(color: Colors.blue),
-      //      ),
-      //    ),
-      //  ],
-      //),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return SingleChildScrollView(
@@ -80,96 +104,86 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     SizedBox(height: 20),
                     TextField(
+                      controller: dobController,
                       decoration: InputDecoration(
                         labelText: 'Date of birth',
-                        border: OutlineInputBorder(),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              //color: dobFocusNode.hasFocus
+                              //    ? Colors.green
+                              //    : Colors.grey, // Green border when focused
+                              ),
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.calendar_today),
+                          onPressed: () {
+                            _selectDate(context);
+                          },
+                        ),
+                        errorText: ageError,
                       ),
+                      readOnly: true,
                     ),
                     SizedBox(height: 20),
                     Text('GENDER', style: TextStyle(fontSize: 16)),
                     SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ChoiceChip(
-                          label: Text('Male'),
-                          selected: selectedGender == 'Male',
-                          onSelected: (bool selected) {
-                            setState(() {
-                              selectedGender = 'Male';
-                            });
-                          },
-                        ),
-                        ChoiceChip(
-                          label: Text('Female'),
-                          selected: selectedGender == 'Female',
-                          onSelected: (bool selected) {
-                            setState(() {
-                              selectedGender = 'Female';
-                            });
-                          },
-                        ),
-                        ChoiceChip(
-                          label: Text('Undisclosed'),
-                          selected: selectedGender == 'Undisclosed',
-                          onSelected: (bool selected) {
-                            setState(() {
-                              selectedGender = 'Undisclosed';
-                            });
-                          },
-                        ),
-                      ],
+                    // Dropdown for Gender
+                    DropdownButtonFormField<String>(
+                      value: selectedGender,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedGender = newValue!;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Select Gender',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: ['Male', 'Female', 'Undisclosed']
+                          .map((String gender) {
+                        return DropdownMenuItem<String>(
+                          value: gender,
+                          child: Text(gender),
+                        );
+                      }).toList(),
                     ),
                     SizedBox(height: 20),
                     Text('MARITAL STATUS', style: TextStyle(fontSize: 16)),
                     SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ChoiceChip(
-                          label: Text('Married'),
-                          selected: selectedMaritalStatus == 'Married',
-                          onSelected: (bool selected) {
-                            setState(() {
-                              selectedMaritalStatus = 'Married';
-                            });
-                          },
-                        ),
-                        ChoiceChip(
-                          label: Text('Unmarried'),
-                          selected: selectedMaritalStatus == 'Unmarried',
-                          onSelected: (bool selected) {
-                            setState(() {
-                              selectedMaritalStatus = 'Unmarried';
-                            });
-                          },
-                        ),
-                        ChoiceChip(
-                          label: Text('Undisclosed'),
-                          selected: selectedMaritalStatus == 'Undisclosed',
-                          onSelected: (bool selected) {
-                            setState(() {
-                              selectedMaritalStatus = 'Undisclosed';
-                            });
-                          },
-                        ),
-                      ],
+                    // Dropdown for Marital Status
+                    DropdownButtonFormField<String>(
+                      value: selectedMaritalStatus,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedMaritalStatus = newValue!;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Select Marital Status',
+                        border: OutlineInputBorder(),
+                      ),
+                      items: ['Married', 'Unmarried', 'Undisclosed']
+                          .map((String status) {
+                        return DropdownMenuItem<String>(
+                          value: status,
+                          child: Text(status),
+                        );
+                      }).toList(),
                     ),
                     SizedBox(height: 20),
-                    //ElevatedButton(
-                    //  onPressed: () {
-                    //    // Add GSTIN details action
-                    //  },
-                    //  child: Text('Add GSTIN details'),
-                    //  style: ElevatedButton.styleFrom(
-                    //    minimumSize: Size(double.infinity, 50),
-                    //  ),
-                    //),
-                    SizedBox(height: 20),
+                    SizedBox(height: 5),
+                    Center(
+                      child: OutlinedButton(
+                        onPressed: () {},
+                        child: Text('Save'),
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15),
                     OutlinedButton(
-                      onPressed: () {
-                        // Logout action
-                      },
+                      onPressed: () {},
                       child: Text('Logout'),
                       style: OutlinedButton.styleFrom(
                         minimumSize: Size(double.infinity, 50),
