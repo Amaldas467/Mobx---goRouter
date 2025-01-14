@@ -12,6 +12,26 @@ class ProductDetailsPage extends StatelessWidget {
 
   ProductDetailsPage({required this.product});
 
+  void _showCustomSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: ColorConstants.buttonColor,
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(
+          top: 80, left: 16, right: 16), // Adjusted to move snack bar up
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      duration: Duration(seconds: 1),
+    );
+
+    // Show the snack bar
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     final cartcontroller = Provider.of<CartController>(context);
@@ -127,21 +147,16 @@ class ProductDetailsPage extends StatelessWidget {
                       onPressed: () {
                         print("Product added to cart");
                         if (cartcontroller.cartProducts.contains(product)) {
-                          cartcontroller.removeFromCart(product);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                                  Text("${product.title} removed from cart"),
-                              duration: Duration(seconds: 2),
-                            ),
+                          //cartcontroller.removeFromCart(product);
+                          _showCustomSnackBar(
+                            context,
+                            "${product.title} already in cart",
                           );
                         } else {
                           cartcontroller.addToCart(product);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("${product.title} added to cart"),
-                              duration: Duration(seconds: 2),
-                            ),
+                          _showCustomSnackBar(
+                            context,
+                            "${product.title} added to cart",
                           );
                         }
                       },

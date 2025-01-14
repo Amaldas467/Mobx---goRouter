@@ -33,7 +33,7 @@ class _SplashState extends State<Splash> {
         int nextPage = (_pageController.page!.toInt() + 1) % 3;
         _pageController.animateToPage(
           nextPage,
-          duration: Duration(milliseconds: 300),
+          duration: Duration(milliseconds: 200),
           curve: Curves.easeInOut,
         );
       }

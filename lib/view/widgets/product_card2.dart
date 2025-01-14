@@ -19,6 +19,25 @@ class ProductCard2 extends StatelessWidget {
     required this.product,
   });
 
+  void _showCustomSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: ColorConstants.buttonColor,
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(top: 80, left: 16, right: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      duration: Duration(seconds: 1),
+    );
+
+    // Show the snack bar
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     final favoritesController = Provider.of<FavouriteController>(context);
@@ -76,21 +95,15 @@ class ProductCard2 extends StatelessWidget {
                           onPressed: () {
                             if (isFavorite) {
                               favoritesController.toggleFavourite(product);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "${product.title} removed from favourites"),
-                                  duration: Duration(seconds: 2),
-                                ),
+                              _showCustomSnackBar(
+                                context,
+                                "${product.title} Removed from favourites",
                               );
                             } else {
                               favoritesController.toggleFavourite(product);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "${product.title} added to favourites"),
-                                  duration: Duration(seconds: 2),
-                                ),
+                              _showCustomSnackBar(
+                                context,
+                                "${product.title} added to favourites",
                               );
                             }
                           },
@@ -136,38 +149,40 @@ class ProductCard2 extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          if (cartController.cartProducts.contains(product)) {
-                            cartController.removeFromCart(product);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content:
-                                    Text("${product.title} removed from cart"),
-                                duration: Duration(seconds: 2),
+                      Observer(
+                        builder: (context) {
+                          bool isInCart =
+                              cartController.cartProducts.contains(product);
+                          return InkWell(
+                            onTap: () {
+                              if (isInCart) {
+                                //cartController.removeFromCart(product);
+                                _showCustomSnackBar(
+                                  context,
+                                  "${product.title} already in cart",
+                                );
+                              } else {
+                                // Add product to cart
+                                cartController.addToCart(product);
+                                _showCustomSnackBar(
+                                  context,
+                                  "${product.title} added to cart",
+                                );
+                              }
+                            },
+                            child: CircleAvatar(
+                              radius: screenWidth * 0.04,
+                              backgroundColor: ColorConstants.buttonColor,
+                              child: Icon(
+                                isInCart
+                                    ? Icons.shopping_cart
+                                    : Icons.shopping_cart_outlined,
+                                color: Colors.white,
                               ),
-                            );
-                          } else {
-                            cartController.addToCart(product);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("${product.title} added to cart"),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          }
+                            ),
+                          );
                         },
-                        child: CircleAvatar(
-                          radius: screenWidth * 0.04,
-                          backgroundColor: ColorConstants.buttonColor,
-                          child: Icon(
-                            cartController.cartProducts.contains(product)
-                                ? Icons.shopping_cart
-                                : Icons.shopping_cart_outlined,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
+                      ),
                     ],
                   ),
                 ],

@@ -1,9 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:skincare_app/controller/cart_controller.dart';
+import 'package:skincare_app/utilities/color_constants.dart';
 
 class CartPage extends StatelessWidget {
   final CartController cartController;
+
+  void _showCustomSnackBar(BuildContext context, String message) {
+    final snackBar = SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: ColorConstants.buttonColor,
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(
+          top: 80, left: 16, right: 16), // Adjusted to move snack bar up
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      duration: Duration(seconds: 1),
+    );
+
+    // Show the snack bar
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   const CartPage({Key? key, required this.cartController}) : super(key: key);
 
@@ -48,11 +69,9 @@ class CartPage extends StatelessWidget {
                   icon: const Icon(Icons.remove_circle, color: Colors.red),
                   onPressed: () {
                     cartController.removeFromCart(product);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("${product.title} removed from cart"),
-                        duration: const Duration(seconds: 2),
-                      ),
+                    _showCustomSnackBar(
+                      context,
+                      "${product.title} Removed from cart",
                     );
                   },
                 ),
