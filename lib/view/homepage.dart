@@ -6,6 +6,8 @@ import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:skincare_app/controller/homescreen_controller.dart';
 import 'package:skincare_app/utilities/color_constants.dart';
+import 'package:skincare_app/view/widgets/drawer.dart';
+import 'package:skincare_app/view/profile_screen.dart';
 import 'package:skincare_app/view/widgets/product_card2.dart';
 import 'package:skincare_app/model/productResModel.dart';
 import 'package:skincare_app/view/widgets/favouritewidget.dart';
@@ -83,9 +85,19 @@ class _HomepageState extends State<Homepage> {
           ),
           SizedBox(width: 15),
         ],
-        leading:
-            Image.asset("assets/icons/menu.png", height: screenHeight * 0.09),
+        leading: Builder(
+          builder: (context) {
+            return InkWell(
+              onTap: () {
+                Scaffold.of(context).openDrawer();
+              },
+              child: Image.asset("assets/icons/menu.png",
+                  height: screenHeight * 0.09),
+            );
+          },
+        ),
       ),
+      drawer: Homescreen_drawer(),
       body: PageView(
         controller: _pageController,
         onPageChanged: onPageChanged,
@@ -362,6 +374,6 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _profilePage() {
-    return Center(child: Text("Profile Page", style: TextStyle(fontSize: 24)));
+    return Center(child: ProfileScreen());
   }
 }
