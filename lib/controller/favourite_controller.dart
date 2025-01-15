@@ -18,12 +18,10 @@ abstract class _FavouriteController with Store {
 
   // Load the favourite products from the database when the controller is created
   Future<void> _loadFavouriteProducts() async {
-    // Clear the list to avoid duplicates after restarting
     favouriteProducts.clear();
     List<ProductREsModel> loadedProducts =
         await _dbHelper.getFavouriteProducts();
 
-    // Ensure no duplicates by checking product IDs before adding
     for (var product in loadedProducts) {
       if (!favouriteProducts.any((favProduct) => favProduct.id == product.id)) {
         favouriteProducts.add(product);
@@ -32,20 +30,22 @@ abstract class _FavouriteController with Store {
   }
 
   @action
-  void toggleFavourite(ProductREsModel product) async {
+  Future<void> toggleFavourite(ProductREsModel product) async {
     // Check if the product is already in the favorites list
     if (isProductFavourite(product)) {
-      favouriteProducts.remove(product);
+      favouriteProducts.remove(product); // Remove from the list
       await _dbHelper.removeFavourite(product); // Remove from the database
+
+      // Reload the favourite products after removal
+      await _loadFavouriteProducts();
     } else {
-      // Only add the product if it's not already in the favorites list
+      // Add to the favorites list
       favouriteProducts.add(product);
       await _dbHelper.insertFavourite(product); // Add to the database
     }
   }
 
   bool isProductFavourite(ProductREsModel product) {
-    // Check if the product is in the favorite list using a unique identifier (e.g., ID)
     return favouriteProducts.any((favProduct) => favProduct.id == product.id);
   }
 }

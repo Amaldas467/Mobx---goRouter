@@ -25,18 +25,13 @@ mixin _$FavouriteController on _FavouriteController, Store {
     });
   }
 
-  late final _$_FavouriteControllerActionController =
-      ActionController(name: '_FavouriteController', context: context);
+  late final _$toggleFavouriteAsyncAction =
+      AsyncAction('_FavouriteController.toggleFavourite', context: context);
 
   @override
-  void toggleFavourite(ProductREsModel product) {
-    final _$actionInfo = _$_FavouriteControllerActionController.startAction(
-        name: '_FavouriteController.toggleFavourite');
-    try {
-      return super.toggleFavourite(product);
-    } finally {
-      _$_FavouriteControllerActionController.endAction(_$actionInfo);
-    }
+  Future<void> toggleFavourite(ProductREsModel product) {
+    return _$toggleFavouriteAsyncAction
+        .run(() => super.toggleFavourite(product));
   }
 
   @override

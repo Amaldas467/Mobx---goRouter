@@ -143,101 +143,30 @@ class _HomepageState extends State<Homepage> {
   Widget _homePage(double screenWidth, double screenHeight) {
     return Observer(
       builder: (context) {
+        // Ensure products are loaded
         if (homescreencontroller.isLoading) {
-          // Shimmer effect while loading data
+          // Show shimmer effect while loading
           return SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(screenWidth * 0.04),
               child: Column(
                 children: [
-                  // Search Bar
-                  TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search products',
-                      hintStyle: TextStyle(color: ColorConstants.buttonColor),
-                      prefixIcon: Image.asset("assets/icons/search-line 1.png"),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 173, 172, 172),
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: const Color.fromARGB(255, 213, 213, 213),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-
-                  // Category buttons shimmer
-                  Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: List.generate(5, (index) {
-                          // Shimmer for 5 placeholders
-                          return Padding(
-                            padding: EdgeInsets.only(right: screenWidth * 0.04),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8.0, horizontal: 16.0),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              width: screenWidth * 0.2,
-                            ),
-                          );
-                        }),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.02),
-
-                  // Gridview shimmer effect
-                  Shimmer.fromColors(
-                    baseColor: Colors.grey[300]!,
-                    highlightColor: Colors.grey[100]!,
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: screenWidth > 600 ? 3 : 2,
-                        crossAxisSpacing: screenWidth * 0.04,
-                        mainAxisSpacing: screenHeight * 0.02,
-                        childAspectRatio: 0.75,
-                      ),
-                      itemCount: 6, // Display a placeholder for 6 items
-                      itemBuilder: (context, index) {
-                        return Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          margin: EdgeInsets.symmetric(vertical: 8.0),
-                        );
-                      },
-                    ),
-                  ),
+                  // Search bar, category buttons, and shimmer for grid
+                  _buildSearchBar(screenWidth, screenHeight),
+                  _buildShimmerCategory(screenWidth),
+                  _buildShimmerGrid(screenWidth, screenHeight),
                 ],
               ),
             ),
           );
         }
 
-        // Once the data has finished loading
+        // Filtered or unfiltered products list
         List<ProductREsModel> displayedProducts = filteredProducts.isEmpty
             ? homescreencontroller.productlist
             : filteredProducts;
 
+        // Filter based on category selection
         if (selectedCategoryIndex != 0) {
           displayedProducts = displayedProducts.where((product) {
             return product.category.toString().split('.').last ==
@@ -245,7 +174,7 @@ class _HomepageState extends State<Homepage> {
           }).toList();
         }
 
-        // If categories have not been loaded yet, fetch them
+        // If categories are not loaded, load them
         if (categories.length == 1 &&
             homescreencontroller.productlist.isNotEmpty) {
           Set<String> categorySet = Set();
@@ -261,74 +190,14 @@ class _HomepageState extends State<Homepage> {
             child: Column(
               children: [
                 // Search Bar
-                TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Search products',
-                    hintStyle: TextStyle(color: ColorConstants.buttonColor),
-                    prefixIcon: Image.asset("assets/icons/search-line 1.png"),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: const Color.fromARGB(255, 173, 172, 172),
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: const Color.fromARGB(255, 213, 213, 213),
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                  ),
-                ),
+                _buildSearchBar(screenWidth, screenHeight),
                 SizedBox(height: screenHeight * 0.02),
 
                 // Category buttons
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(categories.length, (index) {
-                      return Padding(
-                        padding: EdgeInsets.only(right: screenWidth * 0.04),
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              selectedCategoryIndex = index;
-                              _filterProducts();
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8.0, horizontal: 16.0),
-                            decoration: BoxDecoration(
-                              color: selectedCategoryIndex == index
-                                  ? ColorConstants.buttonColor
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(18.0),
-                              border: Border.all(
-                                color: selectedCategoryIndex == index
-                                    ? ColorConstants.buttonColor
-                                    : const Color.fromARGB(255, 198, 198, 198),
-                              ),
-                            ),
-                            child: Text(
-                              categories[index],
-                              style: TextStyle(
-                                color: selectedCategoryIndex == index
-                                    ? Colors.white
-                                    : ColorConstants.buttonColor,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
-                ),
+                _buildCategoryButtons(screenWidth),
                 SizedBox(height: screenHeight * 0.02),
 
+                // No results found message
                 if (filteredProducts.isEmpty &&
                     _searchController.text.isNotEmpty)
                   Center(
@@ -338,6 +207,7 @@ class _HomepageState extends State<Homepage> {
                     ),
                   )
                 else
+                  // Grid of products
                   GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -362,6 +232,126 @@ class _HomepageState extends State<Homepage> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildSearchBar(double screenWidth, double screenHeight) {
+    return TextField(
+      controller: _searchController,
+      decoration: InputDecoration(
+        hintText: 'Search products',
+        hintStyle: TextStyle(color: ColorConstants.buttonColor),
+        prefixIcon: Image.asset("assets/icons/search-line 1.png"),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: const Color.fromARGB(255, 173, 172, 172),
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: const Color.fromARGB(255, 213, 213, 213),
+            width: 2.0,
+          ),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerCategory(double screenWidth) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: List.generate(5, (index) {
+            return Padding(
+              padding: EdgeInsets.only(right: screenWidth * 0.04),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+                width: screenWidth * 0.2,
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildShimmerGrid(double screenWidth, double screenHeight) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: screenWidth > 600 ? 3 : 2,
+          crossAxisSpacing: screenWidth * 0.04,
+          mainAxisSpacing: screenHeight * 0.02,
+          childAspectRatio: 0.75,
+        ),
+        itemCount: 6, // Display 6 placeholder items
+        itemBuilder: (context, index) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            margin: EdgeInsets.symmetric(vertical: 8.0),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildCategoryButtons(double screenWidth) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(categories.length, (index) {
+          return Padding(
+            padding: EdgeInsets.only(right: screenWidth * 0.04),
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  selectedCategoryIndex = index;
+                  _filterProducts();
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                decoration: BoxDecoration(
+                  color: selectedCategoryIndex == index
+                      ? ColorConstants.buttonColor
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(18.0),
+                  border: Border.all(
+                    color: selectedCategoryIndex == index
+                        ? ColorConstants.buttonColor
+                        : const Color.fromARGB(255, 198, 198, 198),
+                  ),
+                ),
+                child: Text(
+                  categories[index],
+                  style: TextStyle(
+                    color: selectedCategoryIndex == index
+                        ? Colors.white
+                        : ColorConstants.buttonColor,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
     );
   }
 

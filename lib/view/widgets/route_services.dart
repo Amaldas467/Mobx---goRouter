@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:skincare_app/controller/cart_controller.dart';
 
 import 'package:skincare_app/model/productResModel.dart';
-import 'package:skincare_app/view/cartpage.dart';
+import 'package:skincare_app/view/widgets/cartpage.dart';
 import 'package:skincare_app/view/category.dart';
 import 'package:skincare_app/view/homepage.dart';
 import 'package:skincare_app/view/splash.dart';
